@@ -1,0 +1,21 @@
+// jscs:disable
+$(function() {
+  var App = {
+    start: function() {
+      // Twitter configuration options
+      $('#tweets').tweet({
+        join_text: 'auto',
+        username: 'TrinitySchBelvd',
+        avatar_size: 32,
+        auto_join_text_default: 'TrinitySchBelvd said',
+        loading_text: 'Checking for new tweets…',
+        count: 3
+      });
+
+      ps.scrollingBanner('.scrolling-banner');
+    }
+  };
+
+  // Run the functions in the start object
+  App.start();
+});

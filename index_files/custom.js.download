@@ -1,0 +1,101 @@
+/* Script Reference
+*
+* Revealing Content
+* Contact Us
+*
+*/
+
+function revealing_content() {
+    var a = ".cp-content-trigger"; // One class for content trigger
+    var b = "cp-trigger-active"; // active state for buttons (without ".")
+    var c = "cp-content-active"; // active state fro Content blocks (without ".")
+    var d = "css-control"; // initial revealing function
+    var e = ".cp-content-block"; // class for content block
+    var f = "data-content"; // content block has to hold attr (it's value should be the same as it's triggers) 
+    var g = 0; // speed for animations if jquery option used.
+    function h() {
+      if ("none" == $(".main-nav h3").css("display")) { // If Desktop version
+        $(a).removeClass(b);
+        $(e).removeClass(c).removeAttr("style");
+        $("body").removeClass("b-content-visible");
+        d = "css-control";   // CSS controlled blocks on desktop
+        //d = "fade-toggle"; // Fade Toggle controlled blocks on desktop
+        // d = "slide-toggle";  // Slide Toggle controlled blocks on desktop
+      } else if ("block" == $(".main-nav h3").css("display")) { // If Responsive version
+        $(a).removeClass(b);
+        $(e).removeClass(c).removeAttr("style");
+        d = "css-control";     // CSS controlled blocks on responsive
+        // d = "fade-toggle";     // Fade Toggle controlled blocks on responsive
+        //d = "slide-toggle"; // Slide Toggle controlled blocks on responsive
+      }
+    }
+    h();
+    var i;
+    var w = $(window).width();
+    $(window).resize(function() {
+      if ($(window).width() == w) return;
+      w = $(window).width();
+      clearTimeout(i);
+      i = setTimeout(function() {
+        h();
+      }, 250);
+    });
+
+    $(a).click(function() {
+      var h = $(this).attr("data-button");
+      var i = e + "[" + f + "='" + h + "']";
+      if ("fade-toggle" === d) {
+        $(e).not(i).fadeOut(g);
+        $(i).delay(g).fadeToggle(g);
+  
+      } else if ("slide-toggle" === d) {
+        $(e).not(i).slideUp(g);
+        $(i).slideToggle(g);
+      } else if ("css-control" === d) {
+        if ($("body").hasClass("b-content-visible") && $(this).hasClass(b)) {
+					$("body").removeClass("b-content-visible");
+				} else if( $(this).parents(".cp-revealing-triggers").hasClass("add-body-class")) {
+					$("body").addClass("b-content-visible");
+				}
+        if ($(i).hasClass(c)) $(i).removeClass(c);
+        else {
+          $(e).removeClass(c);
+          $(i).addClass(c);
+        }
+      }
+      else alert("Please choose 'revealing-option'!. (fade-toggle, slide-toggle or css-control)");
+      if ($(this).hasClass(b)) $(this).removeClass(b);
+      else {
+        $(a).removeClass(b);
+        $(this).addClass(b);
+      }
+      $(document).mouseup(function(f) {
+        var h = $(a + "," + e);
+        if (!h.is(f.target) && 0 === h.has(f.target).length) {
+          $(a).removeClass(b);
+          if ("fade-toggle" === d) $(e).fadeOut(g); 
+          else if ("slide-toggle" === d) $(e).slideUp(g);
+          else if ("css-control" === d) $(e).removeClass(c) && $("body").removeClass("b-content-visible");
+        }
+      });
+    });
+  }revealing_content();
+
+
+$(document).ready(function() {
+
+  var contact_media = window.matchMedia('(max-width: 980px)');
+  function contact_details() {
+    if (contact_media.matches) {
+     $(".get-in-touch").hide();
+      $("#contact-trigger").click(function() {
+        $(".get-in-touch").slideToggle(200);
+      });
+    } else {
+     $(".get-in-touch").css("display","block");
+      $("#contact-trigger").off();
+    }
+  }contact_details();
+  contact_media.addListener(contact_details);
+
+});
